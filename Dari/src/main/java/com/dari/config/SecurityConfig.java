@@ -17,10 +17,10 @@ import com.dari.filter.JwtAuthenticationFilter;
 
 import lombok.AllArgsConstructor;
 
-@EnableWebSecurity
-@AllArgsConstructor
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+//@EnableWebSecurity
+//@AllArgsConstructor
+public class SecurityConfig{// extends WebSecurityConfigurerAdapter {
+/*
 	@Autowired
     private UserDetailsService userDetailsService;
     @Autowired
@@ -54,5 +54,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
+    }*/
 }
