@@ -1,42 +1,57 @@
 package com.dari.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "banks")
 @Entity
-@Table(name = "T_Bank")
 public class Bank {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long BankId ; 
+	@Column(name = "idbank")
+	private long bankId ; 
 	
-	public String Namebank;
+	@Column(name = "Namebank")
+	public String namebank;
 	
-	
-	public String Descbank;
+	@Column(name = "DESCRIPTION")
+	public String descbank;
 
-	public String Adressbank;
+	public String adressbank;
 
-	public String MargeInteretbank;
+	public float margeInteretbank;
 
-	private float Taux;
+	private float taux;
 	
-	@JsonBackReference
+
+	
 	@ManyToOne
 	Agent agentB;
+	
+
+	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "bank")
+	private List<LoansSimulationBank> loansSimulationbank;
 
 }

@@ -3,14 +3,20 @@ package com.dari.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.dari.model.Agent;
 import com.dari.model.Bank;
+import com.dari.repository.AgentRepository;
 import com.dari.repository.BankRepository;
 
+@Service
 public class BankServiceImpl implements BankService {
 
 	@Autowired
 	private BankRepository bankRepository;
+	@Autowired
+	private AgentRepository agentRepository;
 	
 	
 	@Override
@@ -20,9 +26,10 @@ public class BankServiceImpl implements BankService {
 	}
 	
 	
-	public long addbank(Bank bank) {
-		bankRepository.save(bank);
-		return bank.getBankId();
+	public void addbank(Bank bank) {
+		 bankRepository.save(bank);
+		 
+		//return bank.getBankId();
 		
 	}
 	
@@ -51,4 +58,28 @@ public class BankServiceImpl implements BankService {
 		return bank;
 		
 	}
+
+
+	@Override
+	public Bank findnb(String namebank) {
+	Bank bank = bankRepository.findByNamebank(namebank);
+		return bank;
+	}
+	
+
+
+	@Override
+	public void addagent(Agent agent) {
+		 agentRepository.save(agent);
+		
+	}
+	
+	@Override
+	public Agent getagentbynamebank(String namebank)
+	{
+		Bank bank =  bankRepository.findByNamebank(namebank);
+		Agent agent = bank.getAgentB();
+		return agent;
+	}
+	
 }

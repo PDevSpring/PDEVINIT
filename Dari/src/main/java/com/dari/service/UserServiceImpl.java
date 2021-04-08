@@ -20,8 +20,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository ; 
 	@Autowired
 	private VerificationTokenRepository verificationTokenRepository ; 
-	@Autowired
-	private MailSendService mailSendService ; 
+	//@Autowired
+	//private MailSendService mailSendService ; 
 	
 	@Override
 	public void addAdmin(User user) {
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user); 
 		
 		String token=generateVerificationToken(user); 
-		mailSendService.sendEmail(user.getEmail(),"Please Click On The Link Bellow To Confirm : http://localhost:3000/App/Verif/"+token,"Please Confirm Your Account");
+		//mailSendService.sendEmail(user.getEmail(),"Please Click On The Link Bellow To Confirm : http://localhost:3000/App/Verif/"+token,"Please Confirm Your Account");
 		
 		
 	}

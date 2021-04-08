@@ -2,6 +2,7 @@ package com.dari.service;
 
 import java.util.List;
 
+import com.dari.model.Agent;
 import com.dari.model.LoansSimulationBank;
 
 public interface LoansService {
@@ -19,5 +20,12 @@ public interface LoansService {
 	void unConfirmLoan(Long idloan);
 
 	LoansSimulationBank approcheLoan();
+
+	LoansSimulationBank addLoan(String namebank, int years, int AdID, double salaire, Long iduser);
+
+
+	LoansSimulationBank simulate(String nameBank, int nbrAnnee, long idad, double salaire);
+
+
 
 }

@@ -20,7 +20,7 @@ public class Ads {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private long AdID ; 
+	private long adID ; 
 	
 	private String Object ; 
 	private String Description ; 
@@ -33,7 +33,7 @@ public class Ads {
 	private int Surface ; 
 	private int BalconiesNb ; 
 	private int GaragesNb ;
-	private int Price ; 
+	private double Price ; 
 	
 	private Boolean AirConditioner ; 
 	private Boolean Heater ; 
@@ -42,6 +42,8 @@ public class Ads {
 	private Boolean Furnished ;
 	
 	private String type ;
+
+
 
 }
 

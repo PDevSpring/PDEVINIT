@@ -2,6 +2,7 @@ package com.dari.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,13 +24,14 @@ public class LoansSimulationBank {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "IDloan")
 	private long IdLoan;
 	
 	private double Taux;
 	
 	private double Mensuel;
 	
-	private double Capacite;
+	private double CapaciteRembouresement;
 	
 	private double Interet;
 	

@@ -12,20 +12,35 @@ import com.dari.repository.BankRepository;
 import com.dari.repository.LoansRepository;
 import com.dari.repository.UserRepository;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+
+import com.dari.model.Bank;
+
+import com.dari.model.Ads;
+
+import com.dari.model.Agent;
+import com.dari.model.User;
+
 @Service
 public class LoansServiceImpl implements LoansService {
 
 	
 	@Autowired
 	LoansRepository loanRepository;
+	
 	@Autowired
 	BankRepository bankRepository;
+	
 	@Autowired
 	AgentRepository agentRepository;
+	
 	@Autowired
 	AdsRepository adsRepository;
+	
 	@Autowired
 	UserRepository userRepository;
+	
+	BankService bankservice;
 	
 	@Override
 	public List<LoansSimulationBank> getAllLoans() {
@@ -48,11 +63,20 @@ public class LoansServiceImpl implements LoansService {
 		return loanRepository.findById(id).get();
 	}
 	
-	
-	
-	//@Override
-	//public LoansSimulationBank addLoan(String nameBank,int nbrAnnee,int idImmob,double salaireClient,Long idClient) throws MailException, MessagingException {
-	//}
+	public LoansSimulationBank addLoan(String namebank,int years ,int AdID,double salaire,Long iduser)
+	{
+		//Agent agent;
+		User user ;
+		LoansSimulationBank simulation= simulate(namebank, years, AdID, salaire);
+		user=userRepository.findById(iduser).get();
+		//agent=bankservice.getagentbynamebank(namebank);
+		simulation.setUser(user);
+		simulation.setStatus("IN_PROGRESS");
+		
+		loanRepository.save(simulation);
+		
+		return (simulation);
+	}
 
 	
 
@@ -85,4 +109,113 @@ public class LoansServiceImpl implements LoansService {
 		return null;}
 	///////////////////////////////////////////////////////////////
 	//________________calcule___loan___________//
+
+
+
+@Override
+public LoansSimulationBank simulate(String nameBank, int nbrAnnee, long idad, double salaire) {
+	
+	LoansSimulationBank simulation= new LoansSimulationBank();
+	
+	Bank bank=bankRepository.findByNamebank(nameBank);
+	
+	Ads ad=adsRepository.findByAdID(idad);
+	System.out.println("price  "+ ad);
+//	User user=userRepository.getClientByCin(cin);
+//	simulation.setUser(user);	
+	
+	simulation.setBank(bank);
+	
+	simulation.setTaux(calculTaux(bank));
+	
+	simulation.setMensuel(calculTauxMensuel(bank));
+	
+	simulation.setCapaciteRembouresement(calculCapaciteDeRemboursement(salaire));
+	
+	simulation.setMensualite(calculMensualite(ad, bank, nbrAnnee));
+	
+	simulation.setInteret(calculInteret(ad, bank));
+	
+	simulation.setInteretall(calculInteretTotale(ad,bank,nbrAnnee));
+	
+	simulation.setPrincipale(calculPrincipale(ad, bank, nbrAnnee));
+	
+	simulation.setMontantRemb(calculMontantRembourse(ad, bank, nbrAnnee));
+	
+	simulation.setPrixprod(ad.getPrice());
+	
+	simulation.setSalaire(salaire);
+	
+	return simulation;
+}
+
+
+///premethodes
+public double calculTaux(Bank bank)
+{
+	double ctaux = ( bank.getTaux() + bank.getMargeInteretbank() /100 ) ;
+	
+	return ctaux;
+}
+
+public double calculTauxMensuel(Bank bank)
+{
+	return (calculTaux(bank)/12);
+
+}
+
+public double calculNbrEcheance (int years) 
+{
+	return (years*12);	
+}
+
+public double calculCapaciteDeRemboursement(double salaire)
+{
+	return (salaire*0.4);
+}
+
+public double calculInteret(Ads Ads , Bank bank)
+{
+double price=Ads.getPrice();
+double tauxMensuel=calculTauxMensuel(bank);
+return (price*tauxMensuel);
+}
+
+public double calculMensualite(Ads Ads,Bank bank,int years) 
+{
+	double tauxMensuel=calculTauxMensuel(bank);
+	System.out.println("taux  "+ tauxMensuel);
+	System.out.println("price  "+ Ads.getAdID());
+	double interet = Ads.getPrice() * tauxMensuel;
+	System.out.println("interet"+ interet);
+	double nbrecheance=calculNbrEcheance(years)*(-1);
+	System.out.println("nbr cheance "+ nbrecheance);
+	double power=Math.pow(1+tauxMensuel, nbrecheance);
+	System.out.println("power "+ power);
+	double q= 1 - power;
+
+		return (interet/q);
+
+}
+
+public double calculPrincipale(Ads Ads, Bank bank ,int years)
+{
+	double mensualite = calculMensualite(Ads,bank,years);
+	double interet = calculInteret(Ads, bank);
+	
+	return (mensualite-interet);
+}
+
+public double calculMontantRembourse(Ads ads , Bank bank , int years)
+{
+	return calculNbrEcheance(years)*calculMensualite(ads, bank, years);
+}
+
+public double calculInteretTotale(Ads ads ,Bank bank, int years)
+{
+	return (calculMontantRembourse(ads, bank, years)-ads.getPrice());
+}
+
+
+
 }
