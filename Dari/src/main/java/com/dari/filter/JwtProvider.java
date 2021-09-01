@@ -18,9 +18,9 @@ import java.time.Instant;
 import static io.jsonwebtoken.Jwts.parser;
 import static java.util.Date.from;
 
-@Service
+//@Service
 public class JwtProvider {
-
+/*
     private KeyStore keyStore;
     @Value("${jwt.expiration.time}")
     private Long jwtExpirationInMillis;
@@ -88,5 +88,5 @@ public class JwtProvider {
 
     public Long getJwtExpirationInMillis() {
         return jwtExpirationInMillis;
-    }
+    }*/
 }

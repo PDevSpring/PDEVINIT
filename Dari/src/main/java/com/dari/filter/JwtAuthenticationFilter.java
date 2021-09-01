@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
+//@Component
+public class JwtAuthenticationFilter{ // extends OncePerRequestFilter {
+/*
     @Autowired
     private JwtProvider jwtProvider;
     @Autowired
@@ -50,5 +50,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return bearerToken.substring(7);
         }
         return bearerToken;
-    }
+    }*/
 }
